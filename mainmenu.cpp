@@ -1,7 +1,5 @@
 #include "mainmenu.h"
 
-
-
 USING_NS_CC;
 
 enum
@@ -9,28 +7,16 @@ enum
 	kTagTileMap,
 	kTagNode
 };
-Scene* mainmenu::createScene()
-{
-	// 'scene' is an autorelease object
-	auto scene = Scene::create();
-
-	// 'layer' is an autorelease object
-	auto layer = mainmenu::create();
-
-	// add layer as a child to scene
+Scene* mainmenu::createScene(){
+	auto scene = Scene::create(); //AUTORELEASE
+	auto layer = mainmenu::create(); //AUTORELEASE
 	scene->addChild(layer);
-
-	// return the scene
 	return scene;
 }
 
 // on "init" you need to initialize your instance
-bool mainmenu::init()
-{
-	if (!Layer::init())
-	{
-		return false;
-	}
+bool mainmenu::init(){
+	if (!Layer::init()){ return false; }
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -39,38 +25,39 @@ bool mainmenu::init()
 		"CloseNormal.png",
 		"CloseSelected.png",
 		CC_CALLBACK_1(mainmenu::menuCloseCallback, this));
-
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
+	closeItem->setPosition(Vec2(
+		origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
 		origin.y + closeItem->getContentSize().height / 2));
+
 	auto leftButton = MenuItemImage::create(
 		"arrowSilver_left.png",
 		"arrowBlue_left.png",
-		CC_CALLBACK_1(mainmenu::menuLeftCallback, this)
-		);
+		CC_CALLBACK_1(mainmenu::menuLeftCallback, this));
 	leftButton->setScale(5.0);
 	leftButton->setOpacity(160);
-	leftButton->setPosition(Vec2(origin.x + leftButton->getContentSize().width * 5 / 2,
+	leftButton->setPosition(Vec2(
+		origin.x + leftButton->getContentSize().width * 5 / 2,
 		origin.y + leftButton->getContentSize().width * 5 / 2));
 
 
 	auto rightButton = MenuItemImage::create(
 		"arrowSilver_right.png",
 		"arrowBlue_right.png",
-		CC_CALLBACK_1(mainmenu::menuRightCallback, this)
-		);
+		CC_CALLBACK_1(mainmenu::menuRightCallback, this));
 	rightButton->setScale(5.0);
 	rightButton->setOpacity(160);
-	rightButton->setPosition(Vec2(origin.x + rightButton->getContentSize().width * 10,
+	rightButton->setPosition(Vec2(
+		origin.x + rightButton->getContentSize().width * 10,
 		origin.y + rightButton->getContentSize().width * 5 / 2));
 
 	auto jumpButton = MenuItemImage::create(
 		"buttonRound_grey.png",
 		"buttonRound_blue.png",
-		CC_CALLBACK_1(mainmenu::menuRightCallback, this)
-		);
+		CC_CALLBACK_1(mainmenu::menuRightCallback, this));
 	jumpButton->setScale(3.0);
 	jumpButton->setOpacity(160);
-	jumpButton->setPosition(Vec2(origin.x + visibleSize.width - jumpButton->getContentSize().width * 5,
+	jumpButton->setPosition(Vec2(
+		origin.x + visibleSize.width - jumpButton->getContentSize().width * 5,
 		origin.y + jumpButton->getContentSize().width * 5 / 2));
 	
 	auto menu = Menu::create(closeItem,jumpButton,leftButton,rightButton, NULL);
@@ -92,7 +79,7 @@ bool mainmenu::init()
 
 
 	addChild(bg, 0, kTagNode);
-	auto map = TMXTiledMap::create("map2.tmx");
+	auto map = TMXTiledMap::create("map.tmx");
 
 	addChild(map, 0, kTagTileMap);
 

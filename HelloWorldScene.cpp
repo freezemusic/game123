@@ -86,7 +86,7 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
     return;
 #endif
-	auto menu = mainmenu::createscene();
+	auto menu = mainmenu::createScene();
 	Director::getInstance()->replaceScene(menu);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
