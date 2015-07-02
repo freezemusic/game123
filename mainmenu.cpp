@@ -72,7 +72,7 @@ void mainmenu::initStage(int zvalue){
 	this->addChild(bg, zvalue, kTagNode);
 
 	//BG_LAYER02(ground)
-	auto map = TMXTiledMap::create("map.tmx");
+	auto map = TMXTiledMap::create("map2.tmx");
 	this->addChild(map, zvalue, kTagTileMap);
 	//ANTI-ALIASED
 	for (const auto& child : map->getChildren()){
