@@ -87,7 +87,7 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     return;
 #endif
 	auto menu = mainmenu::createScene();
-	Director::getInstance()->replaceScene(menu);
+	Director::getInstance()->replaceScene(TransitionFadeUp::create(0.5, menu));
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);

@@ -14,10 +14,8 @@ Scene* mainmenu::createScene(){
 	return scene;
 }
 
-// on "init" you need to initialize your instance
-bool mainmenu::init(){
-	if (!Layer::init()){ return false; }
-
+// LAYER INIT
+void mainmenu::initGamePanel(int zvalue){
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -53,44 +51,51 @@ bool mainmenu::init(){
 	auto jumpButton = MenuItemImage::create(
 		"buttonRound_grey.png",
 		"buttonRound_blue.png",
-		CC_CALLBACK_1(mainmenu::menuRightCallback, this));
+		CC_CALLBACK_1(mainmenu::menuJumpCallback, this));
 	jumpButton->setScale(3.0);
 	jumpButton->setOpacity(160);
 	jumpButton->setPosition(Vec2(
 		origin.x + visibleSize.width - jumpButton->getContentSize().width * 5,
 		origin.y + jumpButton->getContentSize().width * 5 / 2));
-	
-	auto menu = Menu::create(closeItem,jumpButton,leftButton,rightButton, NULL);
+
+	auto menu = Menu::create(closeItem, jumpButton, leftButton, rightButton, NULL);
 	menu->setPosition(Vec2::ZERO);
-	this->addChild(menu, 1);
-
-
-	auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-
-	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height - label->getContentSize().height));
-
-
+	this->addChild(menu, zvalue);
+}
+void mainmenu::initStage(int zvalue){
+	//BG_LAYER01(sky)
 	auto bg = ParallaxNode::create();
 	auto sky = CCSprite::create("bg.png");
 	sky->setScale(0.5);
 	sky->setAnchorPoint(Vec2(0, 0));
 	bg->addChild(sky, 0, Vec2(0.5, 0.5), Vec2::ZERO);
+	this->addChild(bg, zvalue, kTagNode);
 
-
-	addChild(bg, 0, kTagNode);
+	//BG_LAYER02(ground)
 	auto map = TMXTiledMap::create("map.tmx");
-
-	addChild(map, 0, kTagTileMap);
-
-	// all tiles are aliased by default, let's set them anti-aliased
-	for (const auto& child : map->getChildren())
-	{
+	this->addChild(map, zvalue, kTagTileMap);
+	//ANTI-ALIASED
+	for (const auto& child : map->getChildren()){
 		static_cast<SpriteBatchNode*>(child)->getTexture()->setAntiAliasTexParameters();
 	}
+}
+bool mainmenu::init(){
+	if (!Layer::init()){ return false; }
+
+	//GAMEPANEL
+	initGamePanel(1);
+	initStage(0);
+
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	//TITLE
+	auto label = Label::createWithTTF("sLIME", "fonts/Marker Felt.ttf", 24);
+	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		origin.y + visibleSize.height - label->getContentSize().height));
+	
 	return true;
 }
-
 
 void mainmenu::menuCloseCallback(Ref* pSender)
 {
@@ -118,9 +123,20 @@ void mainmenu::menuLeftCallback(Ref* pSender)
 	exit(0);
 #endif
 }
-
 void mainmenu::menuRightCallback(Ref* pSender)
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.", "Alert");
+	return;
+#endif
+
+
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	exit(0);
+#endif
+}
+void mainmenu::menuJumpCallback(Ref* pSender){
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.", "Alert");
 	return;
