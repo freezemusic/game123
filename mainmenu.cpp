@@ -1,5 +1,5 @@
 #include "mainmenu.h"
-
+#include "Stage/Level.h"
 USING_NS_CC;
 
 enum
@@ -141,9 +141,9 @@ void mainmenu::menuJumpCallback(Ref* pSender){
 	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.", "Alert");
 	return;
 #endif
-
-
-
+	auto scene = Level::createSceneWithMap("map2.tmx");
+	auto trans = TransitionFadeUp::create(0.5f, scene);
+	Director::getInstance()->replaceScene(trans);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	exit(0);
 #endif
